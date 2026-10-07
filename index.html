@@ -1,0 +1,660 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Petualangan Kata Berimbuhan 'me-' | Kelas 4 SD</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Font Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- Canvas Confetti -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 50%, #f1f5f9 100%);
+            min-height: 100vh;
+        }
+        .bounce-hover:hover {
+            transform: translateY(-2px);
+            transition: all 0.2s ease;
+        }
+        .glow-card {
+            box-shadow: 0 10px 25px -5px rgba(59, 130, 246, 0.1);
+        }
+    </style>
+</head>
+<body class="text-slate-800 flex flex-col justify-between min-h-screen">
+
+    <!-- Top Header -->
+    <header class="bg-white/90 backdrop-blur-md border-b border-slate-200 sticky top-0 z-50 px-4 py-3 shadow-sm">
+        <div class="max-w-5xl mx-auto flex flex-wrap justify-between items-center gap-3">
+            <div class="flex items-center gap-3">
+                <div class="bg-blue-600 text-white text-lg w-10 h-10 rounded-xl flex items-center justify-center font-bold shadow">
+                    <i class="fa-solid fa-book-open"></i>
+                </div>
+                <div>
+                    <h1 class="font-bold text-lg sm:text-xl text-slate-800 leading-tight">Petualangan Kata 'me-'</h1>
+                    <p class="text-xs text-blue-600 font-medium">Bahasa Indonesia • Kelas IV SD</p>
+                </div>
+            </div>
+
+            <!-- Score Display -->
+            <div class="flex items-center gap-3 bg-blue-50 px-4 py-2 rounded-xl border border-blue-200">
+                <div class="flex items-center gap-2">
+                    <i class="fa-solid fa-star text-amber-500 text-lg"></i>
+                    <span class="text-xs font-semibold text-slate-600">Skor Total:</span>
+                    <span id="scoreDisplay" class="font-extrabold text-xl text-blue-700">0</span>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="max-w-5xl mx-auto w-full px-4 py-6 flex-grow space-y-6">
+
+        <!-- Navigation Tabs -->
+        <div class="grid grid-cols-2 sm:grid-cols-4 gap-2">
+            <button onclick="switchTab('misi1')" id="tab-misi1" class="tab-btn bg-white border-2 border-blue-600 text-blue-600 font-bold p-3 rounded-xl shadow-sm hover:bg-blue-50 transition flex flex-col items-center gap-1">
+                <i class="fa-solid fa-magnifying-glass text-lg"></i>
+                <span class="text-xs">1. Detektif Bacaan</span>
+            </button>
+            <button onclick="switchTab('misi2')" id="tab-misi2" class="tab-btn bg-white border-2 border-slate-200 text-slate-500 font-bold p-3 rounded-xl shadow-sm hover:bg-blue-50 transition flex flex-col items-center gap-1">
+                <i class="fa-solid fa-gears text-lg"></i>
+                <span class="text-xs">2. Pabrik Imbuhan</span>
+            </button>
+            <button onclick="switchTab('misi3')" id="tab-misi3" class="tab-btn bg-white border-2 border-slate-200 text-slate-500 font-bold p-3 rounded-xl shadow-sm hover:bg-blue-50 transition flex flex-col items-center gap-1">
+                <i class="fa-solid fa-bullseye text-lg"></i>
+                <span class="text-xs">3. Kuis Uji</span>
+            </button>
+            <button onclick="switchTab('lkpd')" id="tab-lkpd" class="tab-btn bg-white border-2 border-slate-200 text-slate-500 font-bold p-3 rounded-xl shadow-sm hover:bg-blue-50 transition flex flex-col items-center gap-1">
+                <i class="fa-solid fa-file-lines text-lg"></i>
+                <span class="text-xs">4. LKPD Digital</span>
+            </button>
+        </div>
+
+        <!-- MISI 1: DETEKTIF BACAAN (HOME / AWAL) -->
+        <section id="content-misi1" class="tab-content space-y-4">
+            <!-- Identitas Siswa (Hanya tampil di Home / Misi 1) -->
+            <div class="bg-white rounded-2xl p-5 shadow-sm border border-blue-100 glow-card">
+                <div class="flex items-center gap-2 text-blue-800 font-bold mb-3 text-sm">
+                    <i class="fa-solid fa-user-pen text-blue-600"></i>
+                    <span>Identitas Murid (Isi Sebelum Memulai):</span>
+                </div>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-500 mb-1">Nama Lengkap Murid:</label>
+                        <input type="text" id="studentName" placeholder="Masukkan nama lengkapmu..." class="w-full px-3.5 py-2 text-sm rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-blue-500 font-medium text-slate-800" oninput="updateLKPDView()">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-500 mb-1">Kelas / No. Absen:</label>
+                        <input type="text" id="studentClass" placeholder="Contoh: IV-A / 12" class="w-full px-3.5 py-2 text-sm rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-blue-500 font-medium text-slate-800" oninput="updateLKPDView()">
+                    </div>
+                </div>
+            </div>
+
+            <div class="bg-white rounded-2xl p-6 shadow-sm border border-slate-200">
+                <div class="flex items-start justify-between gap-4 mb-4 border-b pb-3">
+                    <div>
+                        <span class="bg-blue-100 text-blue-700 font-bold text-xs px-2.5 py-1 rounded-md uppercase">Misi 1</span>
+                        <h2 class="font-bold text-lg sm:text-xl text-slate-800 mt-1">🕵️‍♂️ Detektif Teks Cerita</h2>
+                        <p class="text-xs sm:text-sm text-slate-600">Cari dan temukan kata berimbuhan <b class="text-blue-600">'me-'</b> dalam cerita di bawah. Klik pada kata yang kamu temukan!</p>
+                    </div>
+                    <div class="bg-amber-50 border border-amber-200 px-3 py-1.5 rounded-xl text-center hidden sm:block">
+                        <span class="text-xs text-amber-700 font-semibold block">Ditemukan</span>
+                        <span id="misi1Found" class="font-bold text-base text-amber-900">0 / 6</span>
+                    </div>
+                </div>
+
+                <!-- Visual Header Banner for Story -->
+                <div class="bg-gradient-to-r from-blue-500 to-indigo-600 rounded-2xl p-4 text-white mb-4 flex items-center justify-between shadow-sm">
+                    <div class="flex items-center gap-3">
+                        <div class="bg-white/20 p-3 rounded-xl text-2xl">
+                            🏡
+                        </div>
+                        <div>
+                            <h3 class="font-bold text-sm sm:text-base">Kegiatan Hari Minggu Keluarga Budi</h3>
+                            <p class="text-xs text-blue-100">Amatilah aksi setiap anggota keluarga pada bacaan di bawah!</p>
+                        </div>
+                    </div>
+                    <div class="text-3xl hidden md:block">📖</div>
+                </div>
+
+                <!-- Reading Story Box (Kata 'menyapu' diganti dengan 'menyiram' & kata aksi lainnya) -->
+                <div class="bg-slate-50 p-5 rounded-xl border border-slate-200 text-base leading-relaxed text-slate-700 font-normal">
+                    Hari Minggu, keluarga Budi <span class="story-word cursor-pointer hover:bg-blue-100 hover:text-blue-700 px-1 py-0.5 rounded transition font-normal" data-word="membaca" data-root="baca" data-rule="me- + B = membaca" data-icon="📚">membaca</span> buku bersama di ruang tamu. Ayah sedang <span class="story-word cursor-pointer hover:bg-blue-100 hover:text-blue-700 px-1 py-0.5 rounded transition font-normal" data-word="menulis" data-root="tulis" data-rule="me- + T (luluh) = menulis" data-icon="✍️">menulis</span> surat, sedangkan Ibu <span class="story-word cursor-pointer hover:bg-blue-100 hover:text-blue-700 px-1 py-0.5 rounded transition font-normal" data-word="menyiram" data-root="siram" data-rule="me- + S (luluh) = menyiram" data-icon="🪴">menyiram</span> bunga di halaman. Kakak membantu <span class="story-word cursor-pointer hover:bg-blue-100 hover:text-blue-700 px-1 py-0.5 rounded transition font-normal" data-word="memotong" data-root="potong" data-rule="me- + P (luluh) = memotong" data-icon="✂️">memotong</span> rumput yang panjang. Setelah itu, Adik <span class="story-word cursor-pointer hover:bg-blue-100 hover:text-blue-700 px-1 py-0.5 rounded transition font-normal" data-word="menggambar" data-root="gambar" data-rule="me- + G = menggambar" data-icon="🎨">menggambar</span> pemandangan dan Budi <span class="story-word cursor-pointer hover:bg-blue-100 hover:text-blue-700 px-1 py-0.5 rounded transition font-normal" data-word="mengecat" data-root="cat" data-rule="me- + 1 suku kata (cat) = mengecat" data-icon="🖌️">mengecat</span> pagar kayu dengan rapi.
+                </div>
+
+                <!-- Analysis Panel -->
+                <div id="misi1Panel" class="hidden bg-blue-50/60 border border-blue-200 p-4 rounded-xl space-y-3 mt-4">
+                    <div class="flex justify-between items-center">
+                        <h3 class="font-bold text-sm text-blue-900">Kata Terpilih: <span id="targetWord" class="text-amber-600 underline">...</span></h3>
+                    </div>
+                    <p class="text-xs text-slate-600">Pilih kata dasar yang benar dari kata di atas:</p>
+                    
+                    <div id="rootOptions" class="grid grid-cols-2 sm:grid-cols-4 gap-2">
+                        <!-- Options populated by JS -->
+                    </div>
+                    <div id="misi1Feedback" class="hidden p-3 rounded-lg text-xs font-semibold"></div>
+                </div>
+
+                <!-- Discovered badges -->
+                <div class="mt-4">
+                    <h4 class="text-xs font-semibold text-slate-500 mb-2">Kata Berimbuhan Yang Sudah Kamu Temukan:</h4>
+                    <div id="discoveredList" class="flex flex-wrap gap-2">
+                        <span class="text-xs text-slate-400 italic">Klik kata berimbuhan 'me-' pada cerita di atas!</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- MISI 2: PABRIK IMBUHAN -->
+        <section id="content-misi2" class="tab-content hidden space-y-4">
+            <div class="bg-white rounded-2xl p-6 shadow-sm border border-slate-200">
+                <div class="flex items-start justify-between gap-4 mb-4 border-b pb-3">
+                    <div>
+                        <span class="bg-emerald-100 text-emerald-700 font-bold text-xs px-2.5 py-1 rounded-md uppercase">Misi 2</span>
+                        <h2 class="font-bold text-lg sm:text-xl text-slate-800 mt-1">⚙️ Pabrik Imbuhan & Hukum KTSP</h2>
+                        <p class="text-xs sm:text-sm text-slate-600">Pilih bentuk imbuhan <b class="text-blue-600">'me-'</b> yang menurutmu paling tepat!</p>
+                    </div>
+                    <div class="bg-emerald-50 border border-emerald-200 px-3 py-1.5 rounded-xl text-center">
+                        <span class="text-xs text-emerald-700 font-semibold block">Soal</span>
+                        <span id="factoryProgress" class="font-bold text-base text-emerald-900">1 / 5</span>
+                    </div>
+                </div>
+
+                <!-- Active Question Container -->
+                <div id="factoryActiveBox" class="bg-slate-50 border border-slate-200 rounded-2xl p-6 text-center space-y-5 relative overflow-hidden">
+                    <div class="max-w-xs mx-auto bg-white rounded-2xl p-4 shadow-sm border border-slate-200 flex flex-col items-center justify-center space-y-2">
+                        <div id="factoryIcon" class="text-5xl bg-emerald-50 w-20 h-20 rounded-2xl flex items-center justify-center border border-emerald-100 shadow-inner">
+                            🪴
+                        </div>
+                        <div>
+                            <span class="text-xs font-bold text-slate-400 uppercase tracking-wider">Kata Dasar:</span>
+                            <div id="factoryRootWord" class="font-extrabold text-3xl text-blue-600 mt-0.5">SIRAM</div>
+                        </div>
+                        <span id="factoryHint" class="text-xs text-slate-500 font-medium inline-block bg-slate-100 px-3 py-1 rounded-full border">Huruf awal: S</span>
+                    </div>
+
+                    <!-- Prefix Choice Buttons -->
+                    <div id="factoryPrefixButtons" class="grid grid-cols-2 sm:grid-cols-3 gap-2.5 max-w-lg mx-auto">
+                        <button onclick="checkFactoryAnswer('me-')" class="factory-btn bg-white hover:bg-blue-50 border border-slate-300 text-slate-700 font-bold text-sm py-2.5 rounded-xl transition bounce-hover shadow-sm">me-</button>
+                        <button onclick="checkFactoryAnswer('mem-')" class="factory-btn bg-white hover:bg-blue-50 border border-slate-300 text-slate-700 font-bold text-sm py-2.5 rounded-xl transition bounce-hover shadow-sm">mem-</button>
+                        <button onclick="checkFactoryAnswer('men-')" class="factory-btn bg-white hover:bg-blue-50 border border-slate-300 text-slate-700 font-bold text-sm py-2.5 rounded-xl transition bounce-hover shadow-sm">men-</button>
+                        <button onclick="checkFactoryAnswer('meng-')" class="factory-btn bg-white hover:bg-blue-50 border border-slate-300 text-slate-700 font-bold text-sm py-2.5 rounded-xl transition bounce-hover shadow-sm">meng-</button>
+                        <button onclick="checkFactoryAnswer('meny-')" class="factory-btn bg-white hover:bg-blue-50 border border-slate-300 text-slate-700 font-bold text-sm py-2.5 rounded-xl transition bounce-hover shadow-sm">meny-</button>
+                        <button onclick="checkFactoryAnswer('menge-')" class="factory-btn bg-white hover:bg-blue-50 border border-slate-300 text-slate-700 font-bold text-sm py-2.5 rounded-xl transition bounce-hover shadow-sm">menge-</button>
+                    </div>
+                </div>
+
+                <!-- End Review Section (Hidden initially) -->
+                <div id="factoryReviewBox" class="hidden space-y-4">
+                    <div class="bg-emerald-50 border border-emerald-200 p-4 rounded-2xl text-center space-y-1">
+                        <h3 class="font-extrabold text-lg text-emerald-900">🎉 Misi 2 Selesai!</h3>
+                        <p class="text-xs text-emerald-700">Mari kita bahas bersama jawaban yang telah kamu pilih di bawah ini:</p>
+                    </div>
+                    <div id="factoryReviewList" class="space-y-3">
+                        <!-- Populated by JS -->
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- MISI 3: KUIS UJI -->
+        <section id="content-misi3" class="tab-content hidden space-y-4">
+            <div class="bg-white rounded-2xl p-6 shadow-sm border border-slate-200">
+                <div class="flex items-start justify-between gap-4 mb-4 border-b pb-3">
+                    <div>
+                        <span class="bg-purple-100 text-purple-700 font-bold text-xs px-2.5 py-1 rounded-md uppercase">Misi 3</span>
+                        <h2 class="font-bold text-lg sm:text-xl text-slate-800 mt-1">🎯 Kuis Evaluasi Mandiri</h2>
+                        <p class="text-xs sm:text-sm text-slate-600">Pilih satu jawaban yang menurutmu paling tepat!</p>
+                    </div>
+                    <div class="bg-purple-50 border border-purple-200 px-3 py-1.5 rounded-xl text-center">
+                        <span class="text-xs text-purple-700 font-semibold block">Soal</span>
+                        <span id="quizProgress" class="font-bold text-base text-purple-900">1 / 5</span>
+                    </div>
+                </div>
+
+                <!-- Active Quiz Box -->
+                <div id="quizActiveBox" class="max-w-xl mx-auto bg-slate-50 border border-slate-200 rounded-2xl p-5 space-y-4">
+                    <div id="quizQuestion" class="font-bold text-base text-slate-800">
+                        Loading...
+                    </div>
+
+                    <div id="quizOptions" class="space-y-2">
+                        <!-- Options loaded by JS -->
+                    </div>
+                </div>
+
+                <!-- End Review Section (Hidden initially) -->
+                <div id="quizReviewBox" class="hidden space-y-4">
+                    <div class="bg-purple-50 border border-purple-200 p-4 rounded-2xl text-center space-y-1">
+                        <h3 class="font-extrabold text-lg text-purple-900">🏆 Kuis Selesai!</h3>
+                        <p class="text-xs text-purple-700">Berikut adalah hasil dan pembahasan dari setiap nomor soal:</p>
+                    </div>
+                    <div id="quizReviewList" class="space-y-3">
+                        <!-- Populated by JS -->
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- TAB 4: LKPD DIGITAL -->
+        <section id="content-lkpd" class="tab-content hidden space-y-4">
+            <div class="bg-white rounded-2xl p-6 shadow-sm border border-slate-200">
+                <div class="flex items-start justify-between gap-4 mb-4 border-b pb-3">
+                    <div>
+                        <span class="bg-teal-100 text-teal-700 font-bold text-xs px-2.5 py-1 rounded-md uppercase">LKPD Digital</span>
+                        <h2 class="font-bold text-lg sm:text-xl text-slate-800 mt-1">📄 Rapor Hasil Belajar</h2>
+                        <p class="text-xs sm:text-sm text-slate-600">Ringkasan capaian pembelajaran siswa.</p>
+                    </div>
+                    <button onclick="window.print()" class="bg-slate-800 hover:bg-slate-900 text-white font-bold text-xs px-3.5 py-2 rounded-xl flex items-center gap-1.5">
+                        <i class="fa-solid fa-print"></i> Cetak PDF
+                    </button>
+                </div>
+
+                <!-- LKPD Printable Content -->
+                <div id="printableLKPD" class="border border-slate-300 rounded-2xl p-6 space-y-6 bg-white">
+                    <div class="text-center border-b pb-4">
+                        <h3 class="font-extrabold text-lg text-slate-900 uppercase">LEMBAR KERJA PESERTA DIDIK (LKPD)</h3>
+                        <p class="text-xs text-slate-500 font-medium">Mata Pelajaran: Bahasa Indonesia • Materi: Kata Berimbuhan 'me-'</p>
+                    </div>
+
+                    <!-- Student Info Summary -->
+                    <div class="flex flex-wrap justify-between text-xs bg-slate-50 p-3 rounded-xl border border-slate-200">
+                        <div><b>Nama Siswa:</b> <span id="lkpdNameDisplay" class="text-blue-700 font-bold underline">_________________</span></div>
+                        <div><b>Kelas / Absen:</b> <span id="lkpdClassDisplay" class="text-blue-700 font-bold underline">_________________</span></div>
+                        <div><b>Tanggal:</b> <span id="lkpdDateDisplay" class="font-medium">...</span></div>
+                    </div>
+
+                    <!-- Simplified Total Score Card -->
+                    <div class="bg-blue-50/80 border-2 border-blue-200 rounded-2xl p-6 text-center space-y-2">
+                        <span class="text-xs font-bold text-blue-700 uppercase tracking-wider block">Skor Akhir Capaian Belajar</span>
+                        <div id="lkpdTotalScoreDisplay" class="font-extrabold text-5xl text-blue-800">0 / 100</div>
+                        <p id="lkpdGradeCategory" class="text-xs font-semibold text-slate-600">Selesaikan misi untuk mendapatkan nilai!</p>
+                    </div>
+
+                    <!-- Reflection / Summary Rules -->
+                    <div class="space-y-2 text-xs text-slate-700 bg-slate-50 p-4 rounded-xl border border-slate-200">
+                        <h4 class="font-bold text-slate-800">📌 Rangkuman Konsep Materi:</h4>
+                        <ul class="list-disc pl-4 space-y-1">
+                            <li><b>Peleburan (K, T, S, P):</b> Huruf awal K, T, S, P pada kata dasar akan luluh ketika diberi imbuhan <i>me-</i> (contoh: <i>me- + tulis = menulis</i>).</li>
+                            <li><b>Penggunaan Imbuhan:</b>
+                                <ul class="list-circle pl-4 mt-0.5">
+                                    <li><i>mem-</i> untuk kata berawalan B, F, P, V.</li>
+                                    <li><i>meny-</i> untuk kata berawalan S.</li>
+                                    <li><i>menge-</i> khusus untuk kata dasar 1 suku kata (contoh: <i>cat &rarr; mengecat</i>).</li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <!-- Teacher Signature Box -->
+                    <div class="pt-6 flex justify-end">
+                        <div class="text-center text-xs space-y-12">
+                            <p>Mengetahui,<br/><b>Guru Mata Pelajaran</b></p>
+                            <p class="border-b border-slate-800 font-bold px-8 pb-0.5">Muhammad Nurul Huda</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="bg-white border-t border-slate-200 py-3.5 px-4 text-center text-xs text-slate-500 font-medium">
+        <div class="max-w-5xl mx-auto flex flex-col sm:flex-row justify-between items-center gap-2">
+            <div>
+                © 2026 Game Pembelajaran Bahasa Indonesia Kelas 4 SD
+            </div>
+            <div class="font-semibold text-slate-700 bg-slate-100 px-3 py-1 rounded-full border border-slate-200">
+                Developed by <span class="text-blue-600 font-bold">Muhammad Nurul Huda</span>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Game State Variables
+        let totalPoints = 0; // Max points = 100
+        let misi1FoundCount = 0;
+        let selectedWordElem = null;
+        let selectedWordData = null;
+
+        // Misi 2 Data & Answers tracking
+        const factoryData = [
+            { root: "SIRAM", initial: "S", icon: "🪴", correctPrefix: "meny-", full: "menyiram", rule: "Huruf S luluh/lebur menjadi 'meny-'." },
+            { root: "BACA", initial: "B", icon: "📚", correctPrefix: "mem-", full: "membaca", rule: "Kata dasar berawalan B menggunakan 'mem-'." },
+            { root: "TULIS", initial: "T", icon: "✍️", correctPrefix: "men-", full: "menulis", rule: "Huruf T luluh/lebur menjadi 'men-'." },
+            { root: "CAT", initial: "1 Suku Kata", icon: "🖌️", correctPrefix: "menge-", full: "mengecat", rule: "Kata 1 suku kata ditambah 'menge-'." },
+            { root: "KUNCI", initial: "K", icon: "🗝️", correctPrefix: "meng-", full: "mengunci", rule: "Huruf K luluh/lebur menjadi 'meng-'." }
+        ];
+        let factoryIndex = 0;
+        let userFactoryAnswers = [];
+
+        // Misi 3 Data & Answers tracking
+        const quizQuestions = [
+            {
+                q: "Kata dasar dari kata 'menulis' adalah...",
+                options: ["Tulis", "Nulis", "Sulis", "Itulis"],
+                answer: 0,
+                explain: "Kata dasar 'tulis' diawali T, sehingga T luluh menjadi 'menulis'."
+            },
+            {
+                q: "Kata berimbuhan 'me-' yang tepat untuk kata dasar 'potong' adalah...",
+                options: ["Mempotong", "Menpotong", "Memotong", "Mengpotong"],
+                answer: 2,
+                explain: "Huruf P luluh saat diberi imbuhan me-, jadi 'memotong'."
+            },
+            {
+                q: "Manakah kata yang mengalami peleburan (luluh) huruf awal?",
+                options: ["Membaca", "Mendengar", "Meniup", "Melihat"],
+                answer: 2,
+                explain: "Meniup berasal dari kata dasar 'tiup' (huruf T luluh/lebur)."
+            },
+            {
+                q: "Kata dasar 'cat' jika diberi imbuhan 'me-' menjadi...",
+                options: ["Mencat", "Mengecat", "Memcat", "Mencati"],
+                answer: 1,
+                explain: "Kata 1 suku kata (cat) berubah menjadi 'mengecat'."
+            },
+            {
+                q: "Edo sedang ________ bola ke arah gawang lawan. Kata yang tepat adalah...",
+                options: ["menendang", "mentendang", "mengtendang", "memtendang"],
+                answer: 0,
+                explain: "Kata dasar 'tendang' diawali huruf T, sehingga T luluh menjadi 'menendang'."
+            }
+        ];
+        let quizIndex = 0;
+        let userQuizAnswers = [];
+
+        window.onload = function() {
+            const today = new Date();
+            const options = { year: 'numeric', month: 'long', day: 'numeric' };
+            document.getElementById('lkpdDateDisplay').innerText = today.toLocaleDateString('id-ID', options);
+
+            initMisi1();
+            loadFactoryLevel();
+            loadQuizQuestion();
+            updateLKPDView();
+        };
+
+        function switchTab(tabId) {
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.classList.remove('border-blue-600', 'text-blue-600');
+                btn.classList.add('border-slate-200', 'text-slate-500');
+            });
+
+            document.getElementById(`content-${tabId}`).classList.remove('hidden');
+            const activeBtn = document.getElementById(`tab-${tabId}`);
+            activeBtn.classList.remove('border-slate-200', 'text-slate-500');
+            activeBtn.classList.add('border-blue-600', 'text-blue-600');
+        }
+
+        function initMisi1() {
+            const words = document.querySelectorAll('.story-word');
+            words.forEach(wordElem => {
+                wordElem.addEventListener('click', function() {
+                    if (this.classList.contains('bg-emerald-100')) return;
+
+                    selectedWordElem = this;
+                    selectedWordData = {
+                        word: this.getAttribute('data-word'),
+                        correctRoot: this.getAttribute('data-root'),
+                        rule: this.getAttribute('data-rule'),
+                        icon: this.getAttribute('data-icon') || '📌'
+                    };
+
+                    document.getElementById('misi1Panel').classList.remove('hidden');
+                    document.getElementById('targetWord').innerText = `${selectedWordData.icon} ${selectedWordData.word}`;
+
+                    generateRootOptions(selectedWordData.correctRoot);
+                });
+            });
+        }
+
+        function generateRootOptions(correctRoot) {
+            const allRoots = ["baca", "tulis", "siram", "potong", "gambar", "cat", "kunci", "dorong"];
+            let options = [correctRoot];
+            while (options.length < 4) {
+                let randomR = allRoots[Math.floor(Math.random() * allRoots.length)];
+                if (!options.includes(randomR)) {
+                    options.push(randomR);
+                }
+            }
+            options.sort(() => Math.random() - 0.5);
+
+            const container = document.getElementById('rootOptions');
+            container.innerHTML = '';
+            document.getElementById('misi1Feedback').classList.add('hidden');
+
+            options.forEach(opt => {
+                const btn = document.createElement('button');
+                btn.className = 'bg-white hover:bg-blue-100 border border-slate-300 font-bold text-xs text-slate-700 py-2 rounded-xl transition shadow-sm';
+                btn.innerText = opt;
+                btn.onclick = () => checkMisi1Root(opt, btn);
+                container.appendChild(btn);
+            });
+        }
+
+        function checkMisi1Root(selectedOpt, btnElem) {
+            const feedback = document.getElementById('misi1Feedback');
+            feedback.classList.remove('hidden');
+
+            if (selectedOpt === selectedWordData.correctRoot) {
+                feedback.className = 'p-2.5 rounded-lg text-xs font-semibold bg-emerald-100 text-emerald-800 border border-emerald-300';
+                feedback.innerHTML = `<i class="fa-solid fa-circle-check"></i> Benar! Kata dasar dari <b>${selectedWordData.word}</b> adalah <b>${selectedOpt}</b>. (${selectedWordData.rule})`;
+                
+                selectedWordElem.classList.remove('hover:bg-blue-100');
+                selectedWordElem.classList.add('bg-emerald-100', 'text-emerald-900', 'font-semibold');
+                
+                addDiscoveredBadge(selectedWordData.word, selectedWordData.correctRoot, selectedWordData.icon);
+
+                addScore(6); // ~36 points total for 6 words
+                misi1FoundCount++;
+                document.getElementById('misi1Found').innerText = `${misi1FoundCount} / 6`;
+
+                if (typeof confetti === 'function') confetti({ particleCount: 25, spread: 50, origin: { y: 0.7 } });
+
+                setTimeout(() => {
+                    document.getElementById('misi1Panel').classList.add('hidden');
+                }, 2200);
+
+            } else {
+                feedback.className = 'p-2.5 rounded-lg text-xs font-semibold bg-rose-100 text-rose-800 border border-rose-300';
+                feedback.innerHTML = `<i class="fa-solid fa-circle-xmark"></i> Kurang tepat, coba teliti lagi!`;
+            }
+        }
+
+        function addDiscoveredBadge(word, root, icon) {
+            const list = document.getElementById('discoveredList');
+            if (misi1FoundCount === 0) list.innerHTML = '';
+
+            const badge = document.createElement('div');
+            badge.className = 'bg-emerald-50 border border-emerald-300 text-emerald-800 text-xs px-2.5 py-1 rounded-lg font-medium flex items-center gap-1 shadow-sm';
+            badge.innerHTML = `<span>${icon}</span> <b>${word}</b> (${root})`;
+            list.appendChild(badge);
+        }
+
+        function loadFactoryLevel() {
+            if (factoryIndex >= factoryData.length) {
+                // Hide active box, show review box
+                document.getElementById('factoryActiveBox').classList.add('hidden');
+                document.getElementById('factoryReviewBox').classList.remove('hidden');
+                renderFactoryReview();
+                return;
+            }
+
+            const data = factoryData[factoryIndex];
+            document.getElementById('factoryProgress').innerText = `${factoryIndex + 1} / ${factoryData.length}`;
+            document.getElementById('factoryIcon').innerText = data.icon;
+            document.getElementById('factoryRootWord').innerText = data.root;
+            document.getElementById('factoryHint').innerText = `Huruf Awal: ${data.initial}`;
+        }
+
+        function checkFactoryAnswer(selectedPrefix) {
+            const data = factoryData[factoryIndex];
+            const isCorrect = (selectedPrefix === data.correctPrefix);
+
+            userFactoryAnswers.push({
+                ...data,
+                userPrefix: selectedPrefix,
+                isCorrect: isCorrect
+            });
+
+            if (isCorrect) {
+                addScore(7); // ~35 points for 5 factory questions
+            }
+
+            factoryIndex++;
+            loadFactoryLevel();
+        }
+
+        function renderFactoryReview() {
+            const container = document.getElementById('factoryReviewList');
+            container.innerHTML = '';
+
+            userFactoryAnswers.forEach((item, idx) => {
+                const card = document.createElement('div');
+                card.className = `p-4 rounded-xl border text-xs space-y-1.5 bg-white shadow-sm ${item.isCorrect ? 'border-emerald-200' : 'border-rose-200'}`;
+                
+                const statusBadge = item.isCorrect 
+                    ? `<span class="bg-emerald-100 text-emerald-800 font-bold px-2 py-0.5 rounded text-[11px]"><i class="fa-solid fa-check"></i> Benar</span>`
+                    : `<span class="bg-rose-100 text-rose-800 font-bold px-2 py-0.5 rounded text-[11px]"><i class="fa-solid fa-xmark"></i> Salah</span>`;
+
+                card.innerHTML = `
+                    <div class="flex justify-between items-center">
+                        <span class="font-bold text-slate-700">${idx + 1}. ${item.icon} Kata Dasar: <b class="text-blue-600">${item.root}</b></span>
+                        ${statusBadge}
+                    </div>
+                    <div class="text-slate-600">
+                        • Jawabanmu: <b class="${item.isCorrect ? 'text-emerald-700' : 'text-rose-600'}">${item.userPrefix}</b> | Jawaban Seharusnya: <b class="text-blue-700">${item.correctPrefix}</b>
+                    </div>
+                    <div class="bg-slate-50 p-2 rounded-lg text-slate-700 border mt-1">
+                        <b>Hasil:</b> <span class="text-blue-700 font-bold">${item.full}</span> — <i>${item.rule}</i>
+                    </div>
+                `;
+                container.appendChild(card);
+            });
+        }
+
+        function loadQuizQuestion() {
+            if (quizIndex >= quizQuestions.length) {
+                // Hide active box, show review box
+                document.getElementById('quizActiveBox').classList.add('hidden');
+                document.getElementById('quizReviewBox').classList.remove('hidden');
+                renderQuizReview();
+                return;
+            }
+
+            const currentQ = quizQuestions[quizIndex];
+            document.getElementById('quizProgress').innerText = `${quizIndex + 1} / ${quizQuestions.length}`;
+            document.getElementById('quizQuestion').innerText = `${quizIndex + 1}. ${currentQ.q}`;
+
+            const optionsContainer = document.getElementById('quizOptions');
+            optionsContainer.innerHTML = '';
+
+            currentQ.options.forEach((opt, idx) => {
+                const btn = document.createElement('button');
+                btn.className = 'quiz-opt-btn w-full text-left p-3 rounded-xl border border-slate-200 bg-white hover:bg-purple-50 font-medium text-slate-700 text-xs transition flex items-center gap-2.5';
+                btn.innerHTML = `<span class="w-6 h-6 rounded-full bg-slate-100 text-slate-600 font-bold text-xs flex items-center justify-center">${String.fromCharCode(65 + idx)}</span> <span>${opt}</span>`;
+                btn.onclick = () => checkQuizAnswer(idx);
+                optionsContainer.appendChild(btn);
+            });
+        }
+
+        function checkQuizAnswer(selectedIdx) {
+            const currentQ = quizQuestions[quizIndex];
+            const isCorrect = (selectedIdx === currentQ.answer);
+
+            userQuizAnswers.push({
+                ...currentQ,
+                selectedIdx: selectedIdx,
+                isCorrect: isCorrect
+            });
+
+            if (isCorrect) {
+                addScore(6); // ~30 points total for 5 quiz questions
+            }
+
+            quizIndex++;
+            loadQuizQuestion();
+        }
+
+        function renderQuizReview() {
+            const container = document.getElementById('quizReviewList');
+            container.innerHTML = '';
+
+            userQuizAnswers.forEach((item, idx) => {
+                const card = document.createElement('div');
+                card.className = `p-4 rounded-xl border text-xs space-y-1.5 bg-white shadow-sm ${item.isCorrect ? 'border-purple-200' : 'border-rose-200'}`;
+
+                const statusBadge = item.isCorrect 
+                    ? `<span class="bg-emerald-100 text-emerald-800 font-bold px-2 py-0.5 rounded text-[11px]"><i class="fa-solid fa-check"></i> Benar</span>`
+                    : `<span class="bg-rose-100 text-rose-800 font-bold px-2 py-0.5 rounded text-[11px]"><i class="fa-solid fa-xmark"></i> Salah</span>`;
+
+                const userOptStr = item.options[item.selectedIdx];
+                const correctOptStr = item.options[item.answer];
+
+                card.innerHTML = `
+                    <div class="flex justify-between items-start gap-2">
+                        <span class="font-bold text-slate-800">${idx + 1}. ${item.q}</span>
+                        ${statusBadge}
+                    </div>
+                    <div class="text-slate-600">
+                        • Jawabanmu: <b class="${item.isCorrect ? 'text-emerald-700' : 'text-rose-600'}">${userOptStr}</b>
+                    </div>
+                    ${!item.isCorrect ? `<div class="text-slate-600">• Jawaban Tepat: <b class="text-emerald-700">${correctOptStr}</b></div>` : ''}
+                    <div class="bg-purple-50/70 p-2 rounded-lg text-purple-900 border border-purple-100 mt-1">
+                        <b>Pembahasan:</b> ${item.explain}
+                    </div>
+                `;
+                container.appendChild(card);
+            });
+
+            if (totalPoints >= 70 && typeof confetti === 'function') {
+                confetti({ particleCount: 50, spread: 70, origin: { y: 0.6 } });
+            }
+        }
+
+        function addScore(pts) {
+            totalPoints = Math.min(100, totalPoints + pts);
+            document.getElementById('scoreDisplay').innerText = totalPoints;
+            updateLKPDView();
+        }
+
+        function updateLKPDView() {
+            const nameVal = document.getElementById('studentName').value.trim();
+            const classVal = document.getElementById('studentClass').value.trim();
+
+            document.getElementById('lkpdNameDisplay').innerText = nameVal ? nameVal : '_________________';
+            document.getElementById('lkpdClassDisplay').innerText = classVal ? classVal : '_________________';
+
+            // Update Total Score Display
+            document.getElementById('lkpdTotalScoreDisplay').innerText = `${totalPoints} / 100`;
+
+            const gradeElem = document.getElementById('lkpdGradeCategory');
+            if (totalPoints >= 85) {
+                gradeElem.innerText = "Predikat: Sangat Baik (A) 🏆 - Sangat Menguasai Penggunaan Imbuhan me-";
+                gradeElem.className = "text-xs font-bold text-emerald-700";
+            } else if (totalPoints >= 70) {
+                gradeElem.innerText = "Predikat: Baik (B) ⭐ - Menguasai Sebagian Besar Aturan Imbuhan";
+                gradeElem.className = "text-xs font-bold text-blue-700";
+            } else if (totalPoints >= 50) {
+                gradeElem.innerText = "Predikat: Cukup (C) 🌟 - Perlu Berlatih Lagi Pada Peleburan KTSP";
+                gradeElem.className = "text-xs font-bold text-amber-700";
+            } else {
+                gradeElem.innerText = "Silakan selesaikan Misi 1, 2, dan 3 untuk melihat nilai akhir.";
+                gradeElem.className = "text-xs font-semibold text-slate-500";
+            }
+        }
+    </script>
+</body>
+</html>
